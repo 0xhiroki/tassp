@@ -92,5 +92,6 @@ Use `make clean-postgres` (or `docker stop take-home-postgres && docker rm take-
 - **Optional AI:** Without `OPENAI_API_KEY`, you still get deterministic scheduling reasons; the AI description is additive only.
 - **No infinite scrolling:** Lists (sessions, suggestions, stats) load the current dataset in one shot; virtualized/infinite loading is intentionally out of scope for this take-home.
 - **Availability deletes are destructive:** Removing an availability window automatically deletes any sessions scheduled during that weekly slot.
+- **Session type deletes cascade:** Removing a session type also deletes its associated sessions and suggestions.
 
 Need the full system breakdown? See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for diagrams, API tables, domain model details, and workflow notes—review [`AGENTS.md`](./AGENTS.md) for the AI-agent playbook—and leave the [`./.factory`](./.factory) directory intact so Droid/Factory keeps its cached specs, automation configs, and skill definitions (see `.factory/skills/*/SKILL.md` for available skills such as `doc-writer`).
