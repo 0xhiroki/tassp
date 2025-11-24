@@ -40,7 +40,7 @@ Smart Session Planner take-home: Expo frontend, Next.js + Prisma backend, and su
 | --- | --- | --- |
 | `frontend/.env` | `EXPO_PUBLIC_API_URL` | `http://localhost:3000/api` (points Expo app at backend). |
 | `backend/.env.local` | `DATABASE_URL` | Postgres connection string targeting your local instance (see Prisma docs). |
-|  | `OPENAI_API_KEY` | Optional – enables AI-written suggestion blurbs. Deterministic reasons work without it. |
+|  | `OPENAI_API_KEY` | Optional – enables AI-written suggestion blurbs. Add it to `backend/.env.local` (and `backend/.env` if you also run Dockerized scripts); deterministic reasons work without it. |
 
 ---
 
