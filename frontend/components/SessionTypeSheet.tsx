@@ -5,21 +5,24 @@ import { Text } from '@/components/Themed'
 import { SessionTypeIcon } from '@/components/SessionTypeIcon'
 import { DEFAULT_SESSION_ICON, SESSION_COLOR_CHOICES, SESSION_ICON_CHOICES } from '@/constants/sessionIcons'
 
+type SessionColorChoice = (typeof SESSION_COLOR_CHOICES)[number]
+type SessionIconChoice = (typeof SESSION_ICON_CHOICES)[number]['id']
+
 type SessionTypeSheetProps = {
   mode: 'create' | 'edit'
   visible: boolean
-  initialValue?: { id: string; name: string; category: string; color: string; priority: number; icon: string }
-  onSubmit: (payload: { name: string; category: string; color: string; priority: number; icon: string }) => Promise<void>
+  initialValue?: { id: string; name: string; category: string; color: SessionColorChoice; priority: number; icon: SessionIconChoice }
+  onSubmit: (payload: { name: string; category: string; color: SessionColorChoice; priority: number; icon: SessionIconChoice }) => Promise<void>
   onClose: () => void
   onDelete?: (id: string) => Promise<void>
 }
 
 export function SessionTypeSheet({ mode, visible, initialValue, onClose, onSubmit, onDelete }: SessionTypeSheetProps) {
   const [name, setName] = useState('')
-  const [color, setColor] = useState(SESSION_COLOR_CHOICES[0])
+  const [color, setColor] = useState<SessionColorChoice>(SESSION_COLOR_CHOICES[0])
   const [category, setCategory] = useState('')
   const [priority, setPriority] = useState('3')
-  const [icon, setIcon] = useState(DEFAULT_SESSION_ICON)
+  const [icon, setIcon] = useState<SessionIconChoice>(DEFAULT_SESSION_ICON)
   const [errors, setErrors] = useState<{ name?: string; category?: string; priority?: string }>({})
   const [submitting, setSubmitting] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -30,9 +33,9 @@ export function SessionTypeSheet({ mode, visible, initialValue, onClose, onSubmi
       if (editing && initialValue) {
         setName(initialValue.name)
         setCategory(initialValue.category)
-        setColor(initialValue.color)
+        setColor(initialValue.color as SessionColorChoice)
         setPriority(String(initialValue.priority))
-        setIcon(initialValue.icon)
+        setIcon(initialValue.icon as SessionIconChoice)
       } else {
         setName('')
         setCategory('')
