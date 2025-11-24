@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+
+  sessionTypes        SessionType[]
+  sessions            Session[]
+  availabilityWindows AvailabilityWindow[]
+  Suggestion          Suggestion[]
+}
+
+model SessionType {
+  id             String   @id @default(cuid())
+  userId         String
+  name           String
+  category       String
+  priority       Int
+  color          String
+  icon           String   @default("🎯")
+  completedCount Int      @default(0)
+  createdAt      DateTime @default(now())
+
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessions   Session[]
+  Suggestion Suggestion[]
+
+  @@index([userId])
+}
+
+model AvailabilityWindow {
+  id        String   @id @default(cuid())
+  userId    String
+  dayOfWeek Int
+  startTime String
+  endTime   String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Session {
+  id              String    @id @default(cuid())
+  userId          String
+  sessionTypeId   String
+  description     String    @default("")
+  startTime       DateTime
+  durationMinutes Int
+  completedAt     DateTime?
+  createdAt       DateTime  @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionType SessionType @relation(fields: [sessionTypeId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([sessionTypeId])
+  @@index([startTime])
+}
+
+model Suggestion {
+  id              String   @id @default(cuid())
+  userId          String
+  sessionTypeId   String
+  startTime       DateTime
+  durationMinutes Int
+  reason          String
+  description     String   @default("")
+  createdAt       DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionType SessionType @relation(fields: [sessionTypeId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
